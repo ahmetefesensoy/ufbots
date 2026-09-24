@@ -137,7 +137,9 @@ python download_from_hf.py --training     # sonic_release checkpoint
 
 ## 5. Veriyi yukle
 
-Yerelde hazirlanan paket: `dist/ufbots_payload.zip` (3 MB)
+Yerelde hazirlanan paket: `dist/ufbots_payload.zip` (4.3 MB)
+
+Icerik: 32 dovus klibi + 28 taban klibi (yurume/durus/denge/donus)
 
 **RunPod web arayuzu** → dosya yoneticisi → `/workspace` altina surukle.
 
@@ -148,7 +150,7 @@ cd /workspace
 # (dosyayi yukledikten sonra)
 unzip ufbots_payload.zip -d ufbots
 ls ufbots/csv | wc -l        # 32 olmali
-ls ufbots/base_csv | wc -l   # 17 taban klibi
+ls ufbots/base_csv | wc -l   # 28 taban klibi
 ```
 
 ---
@@ -175,7 +177,7 @@ python gear_sonic/data_process/filter_and_copy_bones_data.py \
     --source /workspace/motion_lib/robot \
     --dest /workspace/motion_lib/robot_filtered --workers 8
 
-ls /workspace/motion_lib/robot_filtered | wc -l    # ~49 olmali
+ls /workspace/motion_lib/robot_filtered | wc -l    # ~60 olmali
 ```
 
 ---
