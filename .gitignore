@@ -1,0 +1,28 @@
+# Buyuk veri — HF/kaynak sitelerden indirilir
+data/cmu_bvh/
+data/combat_bvh/
+data/combat_trimmed/
+data/amass_combat/
+data/raw_csv/
+seed_meta/
+*.tar.bz2
+*.zip
+
+# Cikti
+results/**/*.mp4
+data/*.png
+
+# Arac kurulumlari (ASCII yolda)
+tools/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# G1 mesh dosyalari — mujoco_menagerie'den indirilir (fetch komutu README'de)
+assets/unitree_g1/assets/
+
+# AMASS turevi — akademik lisans, yeniden dagitilamaz
+# (amass.is.tue.mpg.de'den kayit olup indirilir, scripts/extract_amass.py isler)
+data/amass_trimmed/

@@ -1,0 +1,476 @@
+{
+ "train_shot_033": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.5345948935593833,
+  "atilan_oran": 0.1301983245568062
+ },
+ "test_shot_024": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9240242585815942,
+  "atilan_oran": 0.13074729218373973
+ },
+ "test_shot_020": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.7879467688168124,
+  "atilan_oran": 0.13828429376164053
+ },
+ "train_shot_085": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.17360926763248025,
+  "atilan_oran": 0.14076767116138533
+ },
+ "train_shot_087": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.1609404816894593,
+  "atilan_oran": 0.14561550158025044
+ },
+ "test_shot_007": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.5609513207080395,
+  "atilan_oran": 0.14607178525293468
+ },
+ "train_shot_088": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.15586960960516247,
+  "atilan_oran": 0.14767401483880116
+ },
+ "train_shot_090": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.15084794975749818,
+  "atilan_oran": 0.14890338609098178
+ },
+ "train_shot_094": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8941488527120606,
+  "atilan_oran": 0.15113334911128232
+ },
+ "test_shot_023": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.7814211106045751,
+  "atilan_oran": 0.1516978161434369
+ },
+ "test_shot_019": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.768804177021518,
+  "atilan_oran": 0.15554342670530752
+ },
+ "train_shot_050": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.6955538667004437,
+  "atilan_oran": 0.15697193978371
+ },
+ "test_shot_008": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.6456091776515361,
+  "atilan_oran": 0.1572007825703418
+ },
+ "train_shot_036": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.47245723024408093,
+  "atilan_oran": 0.15835729232234905
+ },
+ "train_shot_084": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.17272560502215298,
+  "atilan_oran": 0.1590567656037683
+ },
+ "train_shot_089": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.20620283467653264,
+  "atilan_oran": 0.1595283786635051
+ },
+ "train_shot_035": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.40615160794672595,
+  "atilan_oran": 0.16102306879374256
+ },
+ "test_shot_013": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.7510009677993313,
+  "atilan_oran": 0.1612950462345045
+ },
+ "train_shot_044": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.477867196093804,
+  "atilan_oran": 0.16178678957539816
+ },
+ "train_shot_045": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.5452602469901354,
+  "atilan_oran": 0.16382584836550762
+ },
+ "train_shot_043": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.6819045185999827,
+  "atilan_oran": 0.16486074755551383
+ },
+ "test_shot_012": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8922876592620469,
+  "atilan_oran": 0.16602802996471985
+ },
+ "train_shot_037": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.7457525105342983,
+  "atilan_oran": 0.16657852808952023
+ },
+ "test_shot_011": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.8276931377605143,
+  "atilan_oran": 0.1683917376053279
+ },
+ "train_shot_051": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9145573526893576,
+  "atilan_oran": 0.1686407169060221
+ },
+ "train_shot_032": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.47717971979175156,
+  "atilan_oran": 0.16886936410153855
+ },
+ "test_shot_017": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8153786655832234,
+  "atilan_oran": 0.17033202926008223
+ },
+ "train_shot_086": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.1951068569542942,
+  "atilan_oran": 0.1729410942910459
+ },
+ "train_shot_093": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.894009611807751,
+  "atilan_oran": 0.1756638798480555
+ },
+ "train_shot_091": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8878657994765933,
+  "atilan_oran": 0.17605286044276489
+ },
+ "train_shot_031": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.45306538678500635,
+  "atilan_oran": 0.17714745528821524
+ },
+ "train_shot_039": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.8125384784681975,
+  "atilan_oran": 0.18204835570585406
+ },
+ "train_shot_040": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.8648173664211471,
+  "atilan_oran": 0.1846449098227925
+ },
+ "test_shot_014": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8229613945351075,
+  "atilan_oran": 0.18672683389745554
+ },
+ "train_shot_034": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.49264556306809826,
+  "atilan_oran": 0.1871630976225932
+ },
+ "train_shot_047": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.5858910336197002,
+  "atilan_oran": 0.18930018417312153
+ },
+ "train_shot_038": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.8361934542119565,
+  "atilan_oran": 0.19161415592870965
+ },
+ "train_shot_041": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.7876974401446839,
+  "atilan_oran": 0.19312524335800993
+ },
+ "test_shot_021": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9133814512555918,
+  "atilan_oran": 0.19350797351666743
+ },
+ "test_shot_015": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8726416504021867,
+  "atilan_oran": 0.196359283606211
+ },
+ "train_shot_054": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.6593621459241135,
+  "atilan_oran": 0.19655314284603032
+ },
+ "test_shot_022": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.6890917565852112,
+  "atilan_oran": 0.19797583193378013
+ },
+ "test_shot_026": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.5156121753253803,
+  "atilan_oran": 0.20178596295398799
+ },
+ "train_shot_092": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9130091240498762,
+  "atilan_oran": 0.2112217026654827
+ },
+ "test_shot_025": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.6377106996920714,
+  "atilan_oran": 0.21603250688580128
+ },
+ "train_shot_042": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8938925765068886,
+  "atilan_oran": 0.21619896544250286
+ },
+ "test_shot_030": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.5686696005325445,
+  "atilan_oran": 0.21763997348932365
+ },
+ "test_shot_016": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.6567914323607693,
+  "atilan_oran": 0.22392780255681308
+ },
+ "train_shot_052": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.6238069963337559,
+  "atilan_oran": 0.22737138000163323
+ },
+ "test_shot_029": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.5669462321943384,
+  "atilan_oran": 0.23071294455489288
+ },
+ "train_shot_049": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.3704007233901076,
+  "atilan_oran": 0.2360299396403621
+ },
+ "test_shot_027": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8668952385270149,
+  "atilan_oran": 0.2482162665838399
+ },
+ "train_shot_046": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.6385489860604953,
+  "atilan_oran": 0.2609544053837478
+ },
+ "train_shot_055": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8073814687160311,
+  "atilan_oran": 0.278536560283574
+ },
+ "train_shot_048": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.4440515619821469,
+  "atilan_oran": 0.2810623199529419
+ },
+ "test_shot_028": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.5317349121432253,
+  "atilan_oran": 0.2853749219198812
+ },
+ "test_shot_009": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9081030535394343,
+  "atilan_oran": 0.5080804719535701
+ },
+ "test_shot_010": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8324269599098155,
+  "atilan_oran": 0.6930529436444838
+ },
+ "test_shot_001": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9284246668723292,
+  "atilan_oran": 0.8138633448864883
+ },
+ "train_shot_070": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.884770506985869,
+  "atilan_oran": 0.818277449946832
+ },
+ "train_shot_068": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8896255535727903,
+  "atilan_oran": 0.829728300698544
+ },
+ "test_shot_004": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9042986702971283,
+  "atilan_oran": 0.8346758702544
+ },
+ "train_shot_065": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9043712880550158,
+  "atilan_oran": 0.8353193971238007
+ },
+ "train_shot_059": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9564313243802978,
+  "atilan_oran": 0.84209538661312
+ },
+ "train_shot_064": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9015671229790532,
+  "atilan_oran": 0.8591220866789109
+ },
+ "train_shot_069": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9102031262246568,
+  "atilan_oran": 0.8641473957087467
+ },
+ "train_shot_066": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9076040674851529,
+  "atilan_oran": 0.8670386197360689
+ },
+ "test_shot_005": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.8794268620166047,
+  "atilan_oran": 0.8733404033841873
+ },
+ "train_shot_060": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9447659663013334,
+  "atilan_oran": 0.8734922133571272
+ },
+ "train_shot_061": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.8843540995611803,
+  "atilan_oran": 0.8772334744197937
+ },
+ "train_shot_056": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9234522911530894,
+  "atilan_oran": 0.881063436504503
+ },
+ "train_shot_057": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9109461147484494,
+  "atilan_oran": 0.8890914245064531
+ },
+ "train_shot_062": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9175512587772822,
+  "atilan_oran": 0.8917702996986165
+ },
+ "test_shot_003": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.8950198505405811,
+  "atilan_oran": 0.8923073628647371
+ },
+ "test_shot_002": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.904036478457111,
+  "atilan_oran": 0.8949221187468358
+ },
+ "train_shot_053": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9092378429117683,
+  "atilan_oran": 0.9028332696059949
+ },
+ "train_shot_058": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.914191369449547,
+  "atilan_oran": 0.9045270605820717
+ },
+ "train_shot_063": {
+  "atan": "1",
+  "atilan": "0",
+  "atan_oran": 0.9234245017655156,
+  "atilan_oran": 0.9233799692688055
+ },
+ "train_shot_067": {
+  "atan": "0",
+  "atilan": "1",
+  "atan_oran": 0.9394827474832643,
+  "atilan_oran": 0.926829242568702
+ }
+}

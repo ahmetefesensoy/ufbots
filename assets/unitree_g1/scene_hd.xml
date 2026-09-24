@@ -1,0 +1,10 @@
+<mujoco model="g1 scene hd">
+  <!-- Menagerie sahnesini sarmalar; tek fark HD offscreen framebuffer.
+       scene.xml'e dokunmadan 1280x720 render alabilmek icin. -->
+  <include file="scene.xml"/>
+
+  <visual>
+    <global offwidth="1920" offheight="1080"/>
+    <quality shadowsize="4096"/>
+  </visual>
+</mujoco>

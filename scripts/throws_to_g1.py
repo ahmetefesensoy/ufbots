@@ -1,0 +1,169 @@
+"""ReMoCap Ninjutsu atislarini G1'e retarget eder (kendi FK + GMR IK).
+
+GMR'nin hazir BVH scriptleri bizde calismadi:
+  - bvh_to_robot.py      -> sadece lafan1/nokov formatini aliyor
+  - xsens_bvh_to_robot.py -> parser ReMoCap kanal duzenini kabul etmiyor
+                             (IndexError: bvh_rot_idx)
+
+Cozum: BVH'yi kendimiz okuyup ileri kinematik (FK) ile dunya
+koordinatlarini hesapliyoruz, sonra GMR'nin IK cekirdegine besliyoruz.
+GMR `human_data` olarak {eklem: (pozisyon, quaternion)} bekliyor.
+
+Eklem adlari xsens_mvn_to_g1.json'a gore (remocap_to_g1.py ile
+donusturulmus dosyalar kullanilir).
+
+Kullanim:
+    python scripts/throws_to_g1.py
+    python scripts/throws_to_g1.py --limit 5
+"""
+import argparse
+import pickle
+import sys
+from pathlib import Path
+
+import numpy as np
+from scipy.spatial.transform import Rotation as R
+
+sys.path.insert(0, "C:/ufbots_tools/GMR")
+sys.path.insert(0, "scripts")
+
+SRC = Path(r"C:\ufbots_tools\data\throws_xsens")
+DST = Path(r"C:\ufbots_tools\data\g1_throws")
+
+# GMR'nin IK tablosunda gecen 14 eklem
+# Y-up -> Z-up: +90 derece (dogrulandi: govde-yukari [0,0,1] cikiyor)
+YUP2ZUP = R.from_euler('x', 90, degrees=True)
+
+NEEDED = ["Pelvis", "Chest",
+          "Left_UpperLeg", "Left_LowerLeg", "Left_Foot",
+          "Right_UpperLeg", "Right_LowerLeg", "Right_Foot",
+          "Left_UpperArm", "Left_Forearm", "Left_Hand",
+          "Right_UpperArm", "Right_Forearm", "Right_Hand"]
+
+
+def parse_bvh(path: Path):
+    """BVH -> (eklemler, ebeveyn, offset, kanallar, hareket, frame_time).
+
+    NOT: hiyerarsi ayristirmasi `{` gorulunce eklemi yigina, `}` gorulunce
+    yigindan cikarir. Eklem adi ile `{` arasindaki sira onemli — once ad
+    okunur, sonra `{` gelir.
+    """
+    lines = path.read_text(errors="replace").splitlines()
+    joints, parent, offset, channels = [], {}, {}, {}
+    stack = []          # acik bloklarin eklem adlari (None = End Site)
+    pending = None      # adi okunmus ama `{` beklenen eklem
+    i = 0
+    for i, raw in enumerate(lines):
+        s = raw.strip()
+        if s.startswith(("ROOT", "JOINT")):
+            pending = s.split()[1]
+        elif s.startswith("End"):
+            pending = None          # End Site: isimsiz blok
+        elif s == "{":
+            if pending is not None:
+                parent[pending] = next((x for x in reversed(stack) if x), None)
+                joints.append(pending)
+            stack.append(pending)
+            pending = None
+        elif s == "}":
+            if stack:
+                stack.pop()
+        elif s.startswith("OFFSET") and stack and stack[-1]:
+            offset[stack[-1]] = np.array([float(x) for x in s.split()[1:4]])
+        elif s.startswith("CHANNELS") and stack and stack[-1]:
+            channels[stack[-1]] = s.split()[2:]
+        elif s.startswith("MOTION"):
+            break
+
+    ft, start = 1 / 30, None
+    for j in range(i, min(i + 6, len(lines))):
+        if lines[j].strip().startswith("Frame Time:"):
+            ft = float(lines[j].split(":")[1])
+            start = j + 1
+    data = np.array([[float(x) for x in l.split()] for l in lines[start:] if l.strip()])
+    return joints, parent, offset, channels, data, ft
+
+
+def forward_kinematics(joints, parent, offset, channels, frame):
+    """Tek karede her eklemin dunya pozisyonu + rotasyonu."""
+    pos, rot = {}, {}
+    k = 0
+    for j in joints:
+        ch = channels.get(j, [])
+        t = np.zeros(3)
+        eul, order = [], ""
+        for c in ch:
+            v = frame[k]; k += 1
+            if c.endswith("position"):
+                t["XYZ".index(c[0])] = v
+            else:
+                eul.append(v); order += c[0]
+        local_r = R.from_euler(order, eul, degrees=True) if eul else R.identity()
+
+        p = parent[j]
+        if p is None:
+            pos[j] = t
+            rot[j] = local_r
+        else:
+            rot[j] = rot[p] * local_r
+            pos[j] = pos[p] + rot[p].apply(offset[j] + t)
+    return pos, rot
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--src", default=str(SRC))
+    ap.add_argument("--dst", default=str(DST))
+    ap.add_argument("--limit", type=int)
+    ap.add_argument("--scale", type=float, default=0.001, help="mm -> m (ReMoCap birimi)")
+    args = ap.parse_args()
+
+    from general_motion_retargeting import GeneralMotionRetargeting as GMR
+
+    src, dst = Path(args.src), Path(args.dst)
+    dst.mkdir(parents=True, exist_ok=True)
+    files = sorted(src.glob("*.bvh"))[: args.limit]
+    if not files:
+        raise SystemExit(f"BVH yok: {src}")
+
+    print(f"{len(files)} atis -> {dst}\n")
+    ok = fail = 0
+    for f in files:
+        try:
+            joints, parent, offset, channels, data, ft = parse_bvh(f)
+            missing = [j for j in NEEDED if j not in joints]
+            if missing:
+                print(f"  {f.name:<30} EKSIK EKLEM: {missing[:3]}")
+                fail += 1
+                continue
+
+            retarget = GMR(actual_human_height=1.75, src_human="xsens_mvn",
+                           tgt_robot="unitree_g1", verbose=False)
+
+            qpos = []
+            for fr in data:
+                p, r = forward_kinematics(joints, parent, offset, channels, fr)
+                # ReMoCap Y-up, MuJoCo Z-up: (x,y,z) -> (x, -z, y)
+                human = {}
+                for j in NEEDED:
+                    v = p[j] * args.scale
+                    human[j] = (np.array([v[0], v[2], v[1]]),
+                                (YUP2ZUP * r[j]).as_quat(scalar_first=True))
+                qpos.append(retarget.retarget(human))
+
+            q = np.asarray(qpos)
+            with open(dst / f"{f.stem}.pkl", "wb") as fh:
+                pickle.dump({"fps": np.array(1 / ft),
+                             "root_pos": q[:, :3], "root_rot": q[:, 3:7],
+                             "dof_pos": q[:, 7:]}, fh)
+            print(f"  {f.name:<30} OK  {len(q)} kare")
+            ok += 1
+        except Exception as e:
+            print(f"  {f.name:<30} HATA {type(e).__name__}: {str(e)[:60]}")
+            fail += 1
+
+    print(f"\ntamam {ok} | hata {fail}")
+
+
+if __name__ == "__main__":
+    main()
