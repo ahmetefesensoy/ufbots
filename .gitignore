@@ -26,3 +26,5 @@ assets/unitree_g1/assets/
 # AMASS turevi — akademik lisans, yeniden dagitilamaz
 # (amass.is.tue.mpg.de'den kayit olup indirilir, scripts/extract_amass.py isler)
 data/amass_trimmed/
+data/base_csv/
+dist/

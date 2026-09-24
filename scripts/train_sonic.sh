@@ -15,7 +15,8 @@
 set -euo pipefail
 
 WBC="${WBC_ROOT:-$HOME/GR00T-WholeBodyControl}"
-OURS="${OURS:-$PWD/sonic_input/csv}"          # bizim 33 hareket
+OURS="${OURS:-$PWD/sonic_input/csv}"          # ayiklanmis dovus hareketleri
+BASE="${BASE:-$PWD/sonic_input/base_csv}"     # taban karisimi (yurume/durus/denge)
 SEED="${SEED_DIR:-$PWD/data/bones_seed_g1}"   # taban karisimi (opsiyonel)
 OUT="${OUT_DIR:-$PWD/data/motion_lib_ufbots}"
 
@@ -34,6 +35,15 @@ step_convert() {
 
   # Filtre: dosya adlarimizda 'cartwheel/handstand/box_jump' yok,
   # o yuzden hicbiri elenmemeli. Yine de calistirip dogruluyoruz.
+  # TABAN KARISIMI — catastrophic forgetting onlemi.
+  # Sadece dovuse fine-tune edersek robot yurumeyi unutur.
+  if [ -d "$BASE" ] && [ "$(ls -A "$BASE" 2>/dev/null)" ]; then
+    echo ">>> 1b  Taban hareketleri ekleniyor ($(ls -1 "$BASE" | wc -l) klip)"
+    python gear_sonic/data_process/convert_soma_csv_to_motion_lib.py         --input "$BASE" --output "$OUT/robot"         --fps 30 --fps_source 120 --individual --num_workers 8
+  else
+    echo ">>> 1b  UYARI: taban karisimi yok — robot yurumeyi unutabilir"
+  fi
+
   echo ">>> 2/4  Filtre (bizim adlarda elenecek kelime yok)"
   python gear_sonic/data_process/filter_and_copy_bones_data.py \
       --source "$OUT/robot" \
