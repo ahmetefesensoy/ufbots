@@ -7,30 +7,56 @@ sirayla takip edilirse sapma olmaz.
 
 ---
 
-## 0. Once bunu oku
+## 0. BUTCE KURALLARI — once bunu oku
+
+$5 son butce. Asagidakileri harfiyen uygula, sapma para yakar.
 
 | Kural | Sebep |
 |---|---|
-| **RTX GPU sec** (4090 / A6000 / L40S) | Isaac Sim RT Core istiyor. A100/H100 **desteklenmiyor**. |
-| **Volume kullan** (en az 60 GB) | Isaac Sim ~30 GB. Pod silinince volume kalir. |
-| **Is bitince pod'u durdur** | Calisirken saat basi odersin. |
-| Kurulum bitince **snapshot al** | Ikinci denemede kurulum tekrar etmez. |
+| **COMMUNITY CLOUD sec** | Secure Cloud RTX 4090 = $0.69/saat. Community = ~$0.34. **Iki kati fark.** |
+| **RTX GPU sec** (4090 / A5000 / A4000) | Isaac Sim RT Core istiyor. A100/H100 **desteklenmiyor**. |
+| **Disk 40 GB** (60 degil) | Isaac Sim ~25 GB + checkpoint. 40 yeter. |
+| **Isi TEK OTURUMDA bitir** | Pod durdurulunca disk ucreti **ikiye katlaniyor** ($0.20/GB/ay). |
+| **Bitince TERMINATE** (Stop degil) | Stop = disk ucreti devam eder. Terminate = her sey durur. |
+
+### Gercek maliyet tablosu
+
+| Senaryo | Community | Secure |
+|---|---|---|
+| iyi (4h, tek oturum) | **$1.79** ✅ | $3.19 ⚠️ |
+| orta (6h, 2 gun bekleme) | **$2.89** ✅ | $4.99 ❌ |
+| kotu (9h, 3 gun bekleme) | $4.34 ⚠️ | $7.48 ❌ |
+
+**Secure Cloud'da orta senaryo butceyi asiyor.** Community Cloud sart.
+
+> Community Cloud ucuncu taraf makineler — biraz daha az garantili ama
+> bizim isimiz icin fark etmez. Fiyat farki hayati.
+
+### Acil durum freni
+
+RunPod panelinde canli harcama gorunur. **$3.50'yi gecerse** pod'u
+hemen terminate et, elindeki checkpoint'le devam et.
 
 ---
 
 ## 1. Pod olustur
 
-RunPod → **Deploy** → GPU sec:
+RunPod → **Deploy** → sol ustte **Community Cloud** sekmesini sec.
 
-| GPU | $/saat | Not |
-|---|---|---|
-| **RTX 4090** | ~0.34 | ✅ en ucuz uygun |
-| RTX A6000 | ~0.49 | 48 GB VRAM, daha rahat |
-| L40S | ~0.79 | en hizli |
+| GPU | ~$/saat | VRAM | Not |
+|---|---|---|---|
+| **RTX A4000** | ~0.17 | 16 GB | ✅ en ucuz, yeterli |
+| **RTX A5000** | ~0.26 | 24 GB | ✅ rahat |
+| RTX 4090 | ~0.34 | 24 GB | en hizli |
+
+> A4000 16 GB — `num_envs=512` ile sorunsuz. Butce daraysa bunu sec.
 
 **Template:** `RunPod PyTorch 2.x` (CUDA 12.x)
-**Volume:** 60 GB, mount `/workspace`
-**Ports:** 8888 (jupyter) yeterli
+**Container disk:** 40 GB
+**Volume:** gerekmiyor (tek oturumda bitireceksin)
+
+⚠️ **Volume eklersen** pod'u terminate etsen bile disk ucreti devam eder.
+Tek oturum planinda volume'a gerek yok.
 
 ---
 
@@ -41,49 +67,59 @@ Web terminal ya da SSH:
 ```bash
 cd /workspace
 nvidia-smi                      # RTX gorunuyor mu, dogrula
-df -h /workspace                # 60 GB var mi
+df -h /workspace                # 40 GB var mi
 ```
 
 `nvidia-smi` cikisinda **RTX** yazmiyorsa pod'u sil, dogru GPU ile ac.
 
 ---
 
-## 3. Isaac Sim + Isaac Lab kur
+## 3. Isaac Lab — HAZIR IMAJ KULLAN
 
-⚠️ **En uzun adim (~30-45 dk).** Sabirli ol, cikti akiyorsa calisiyor.
+⚠️ **pip ile kurma!** 45 dakika surer ve para yakar.
+NVIDIA'nin hazir imaji var ve **SONIC'in istedigi tam surum**:
 
-**Python 3.11 SART** (Isaac Sim 5.x icin):
-
-```bash
-python --version            # 3.11.x olmali, degilse:
-conda create -n isaac python=3.11 -y && conda activate isaac
+```
+nvcr.io/nvidia/isaac-lab:2.3.2
 ```
 
-```bash
-cd /workspace
-pip install --upgrade pip
+### Pod olustururken
 
-# PyTorch — Isaac Sim'in bekledigi tam surum
-pip install -U torch==2.7.0 torchvision==0.22.0  --index-url https://download.pytorch.org/whl/cu128
+**Template** yerine **Custom Image** sec ve yukaridaki adresi gir.
 
-# Isaac Sim 5.1.0
-pip install "isaacsim[all,extscache]==5.1.0"  --extra-index-url https://pypi.nvidia.com
-
-# Isaac Lab
-git clone https://github.com/isaac-sim/IsaacLab.git
-cd IsaacLab
-./isaaclab.sh --install
+Environment variables (zorunlu):
+```
+ACCEPT_EULA=Y
+PRIVACY_CONSENT=Y
 ```
 
-Dogrulama:
+Bu ikisi olmazsa konteyner acilmaz.
+
+### Baglaninca dogrula
 
 ```bash
-python -c "import isaacsim; print('isaacsim OK')"
 python -c "import isaaclab; print('isaaclab OK')"
+ls /workspace/isaaclab        # bos OLMAMALI
 ```
+
+> ⚠️ Bilinen sorun: RunPod UDP trafigi acmiyor, bazi durumlarda
+> `/workspace/isaaclab/` bos kaliyor. Bos gorursen pod'u terminate
+> edip asagidaki alternatife gec.
+
+### Alternatif: pip kurulumu (imaj calismazsa)
+
+Sadece hazir imaj tutmazsa. **Python 3.11 sart.**
+
+```bash
+python --version            # 3.11.x olmali
+pip install -U torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cu128
+pip install "isaacsim[all,extscache]==5.1.0" --extra-index-url https://pypi.nvidia.com
+git clone https://github.com/isaac-sim/IsaacLab.git && cd IsaacLab && ./isaaclab.sh --install
+```
+
+Bu yol ~45 dk ve ~$0.25 ekstra maliyet demek.
 
 ---
-
 ## 4. GR00T-WBC kur
 
 ```bash
@@ -261,25 +297,45 @@ volume kalsin ki tekrar kurulum yapmayasin).
 | `git lfs pull` atlanmis | Sessiz bozuk veri — tekrar calistir |
 | CUDA OOM | `num_envs` dusur (1024 → 512 → 256) |
 | Egitim cok yavas | `throughput/fps` bak; <200 ise GPU yanlis |
-| Disk dolu | Volume'u 60 GB'a cikar |
+| Disk dolu | Container disk'i 50 GB'a cikar (pod yeniden olustur) |
 
 ---
 
 ## Maliyet takibi
 
-RunPod panelinde canli harcama gorunur. Beklenen:
+RunPod panelinde canli harcama gorunur.
+
+### Hazir imajla (onerilen) — Community Cloud RTX A5000 @ $0.26
 
 ```
-kurulum      1.5 saat   $0.51
-donusum      0.2 saat   $0.07
-deneme       0.3 saat   $0.10
-egitim       3.0 saat   $1.02
-eval+export  0.5 saat   $0.17
---------------------------------
-toplam       5.5 saat   ~$1.87
+imaj indirme + acilis    0.3 saat   $0.08
+GR00T-WBC kurulum        0.5 saat   $0.13
+veri donusumu            0.2 saat   $0.05
+kisa deneme (200 iter)   0.3 saat   $0.08
+egitim (20000 iter)      3.0 saat   $0.78
+eval + render + ONNX     0.5 saat   $0.13
+--------------------------------------------
+toplam                   4.8 saat   ~$1.25
 ```
 
-$5 butcede rahat pay var.
+### Pip kurulumuyla (imaj tutmazsa)
+
+```
++ Isaac Sim pip kurulum  0.8 saat   +$0.21
+--------------------------------------------
+toplam                   5.6 saat   ~$1.46
+```
+
+### Guvenlik payi
+
+| Durum | Maliyet | Butce |
+|---|---|---|
+| Her sey yolunda | ~$1.25 | ✅ $3.75 kalir |
+| Bir seyler takilir (2x sure) | ~$2.50 | ✅ $2.50 kalir |
+| Felaket (3x sure) | ~$3.75 | ⚠️ $1.25 kalir |
+
+**$3.50 esigini gecerse dur.** Elindeki checkpoint'le devam et —
+20000 degil 5000 iterasyonda bile kullanilabilir sonuc cikar.
 
 ---
 
