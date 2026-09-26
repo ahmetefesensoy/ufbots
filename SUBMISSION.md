@@ -7,7 +7,7 @@ Forma kopyalanacak metinler. Track: **Martial Arts**
 ## Project name
 
 ```
-G1 Chanleak — Bokator Flying Knee
+Chanleak: Bokator on a G1
 ```
 
 Alternatifler:
@@ -122,13 +122,13 @@ Motion Data by Bones Studio
 ## GitHub repo
 
 ```
-github.com/<kullanici>/ufbots
+https://github.com/ahmetefesensoy/ufbots
 ```
 
 Repo hazir, 4 commit. Push icin (GitHub'da bos repo acip):
 
 ```bash
-git remote add origin https://github.com/<kullanici>/ufbots.git
+git remote add origin https://https://github.com/ahmetefesensoy/ufbots.git
 git push -u origin master
 ```
 
@@ -137,7 +137,7 @@ git push -u origin master
 ## ONNX policy — Hugging Face
 
 ```
-hf.co/<kullanici>/ufbots-chanleak-g1
+https://huggingface.co/AhmetEfesensoy/ufbots-chanleak-g1
 ```
 
 Hazir: `dist/onnx/` — 5 ONNX + model karti.
@@ -147,7 +147,7 @@ Ana dosya `model_step_005000_g1.onnx` (58 MB) dogrulandi:
 ```bash
 hf auth login
 hf repo create ufbots-chanleak-g1 --type model
-hf upload <kullanici>/ufbots-chanleak-g1 dist/onnx .
+hf upload AhmetEfesensoy/ufbots-chanleak-g1 dist/onnx .
 ```
 
 ---
@@ -155,14 +155,14 @@ hf upload <kullanici>/ufbots-chanleak-g1 dist/onnx .
 ## Dataset — Hugging Face
 
 ```
-hf.co/datasets/<kullanici>/ufbots-bokator-g1
+https://huggingface.co/datasets/AhmetEfesensoy/ufbots-bokator-g1
 ```
 
 Hazir: `dist/ufbots-bokator-g1/` — 32 klip (CSV+NPZ), manifest, metrikler, kart.
 
 ```bash
 hf repo create ufbots-bokator-g1 --type dataset
-hf upload <kullanici>/ufbots-bokator-g1 dist/ufbots-bokator-g1 . --repo-type dataset
+hf upload AhmetEfesensoy/ufbots-bokator-g1 dist/ufbots-bokator-g1 . --repo-type dataset
 ```
 
 ---
@@ -202,7 +202,7 @@ Pipeline: CMU Mocap -> AMASS SMPL-X -> GMR retarget -> G1 29-DOF -> SONIC.
 
 Motion Data by Bones Studio
 
-Code: github.com/<kullanici>/ufbots
+Code: https://github.com/ahmetefesensoy/ufbots
 ```
 
 Yuklerken **Unlisted degil Public** sec — form linki acacak.
@@ -211,11 +211,11 @@ Yuklerken **Unlisted degil Public** sec — form linki acacak.
 
 ## Yuklemeden once
 
-- [ ] GitHub repo push
-- [ ] HF model upload
-- [ ] HF dataset upload
+- [x] GitHub repo push
+- [x] HF model upload
+- [x] HF dataset upload
 - [ ] YouTube upload (Public)
-- [ ] Linkleri bu dosyada `<kullanici>` yerine yaz
+- [ ] Linkleri bu dosyada `AhmetEfesensoy` yerine yaz
 - [ ] Formu doldur
 
 **HF token:** sohbete yapistirdigin eski token'i
