@@ -1,4 +1,30 @@
-# ufbots — G1 Bokator
+# ufbots — G1 Chanleak (Bokator Flying Knee)
+
+**Teaching a Unitree G1 humanoid the Chanleak — the flying knee strike from
+Bokator, the Khmer battlefield martial art.** Fine-tuned from NVIDIA SONIC /
+GR00T-WholeBodyControl.
+
+|  | PD control | Trained policy |
+|---|---|---|
+| Success rate | **0%** | **61%** |
+| mpjpe_g | — | 189.1 mm *(target <200)* |
+
+Retargeted clips tracked joint angles to within **2.2–3.3 degrees** under
+MuJoCo physics — and all 32 fell within **1.1 seconds**. Kinematic
+correctness is not balance. That gap is what the policy closes.
+
+Pipeline: `CMU Mocap -> AMASS SMPL-X -> GMR retarget -> G1 29-DOF -> SONIC`
+
+*Motion Data by Bones Studio*
+
+<sub>Detailed documentation below is in Turkish. See
+[SUBMISSION.md](SUBMISSION.md) for the full English writeup.</sub>
+
+---
+
+## Turkce
+
+### G1 Bokator
 
 Unitree G1'e **Chanleak** (bokator'un ucan diz vurusu) ve yakin mesafe
 dovus kombinasyonlari ogretme projesi.
@@ -12,6 +38,25 @@ dovus kombinasyonlari ogretme projesi.
 
 ---
 
+## Sonuc
+
+|  | PD kontrol | Egitilmis politika |
+|---|---|---|
+| **Basari orani** | **%0** | **%61** |
+| mpjpe_g | — | 189.1 mm *(hedef <200)* ✅ |
+| mpjpe_l | — | 38.9 mm *(hedef <30)* |
+| Ilerleme orani | — | %77 |
+
+Asil bulgu %0 tarafinda. Retarget edilen klipler MuJoCo fiziginde eklem
+acilarini **2.2–3.3 derece** hatayla takip ediyordu — ve 32'sinin hepsi
+**1.1 saniye icinde dustu**. Kinematik dogruluk denge demek degil;
+politikanin kapattigi bosluk tam olarak bu.
+
+`sonic_release` checkpoint'inden **6.933 iterasyon**, tek NVIDIA L4,
+~10 GPU-saat.
+
+---
+
 ## Durum
 
 | Asama | Durum |
@@ -22,8 +67,8 @@ dovus kombinasyonlari ogretme projesi.
 | Bokator kombinasyonlari | ✅ 4 dizi |
 | Gures (ReMoCap Ninjutsu) | ⚠️ kismi (bkz. sinirlar) |
 | SONIC egitim formati | ✅ 33 hareket, 129 s |
-| **Fine-tune** | ⬜ GPU bekliyor |
-| ONNX export | ⬜ |
+| **Fine-tune** | ✅ 6.933 iterasyon, %61 basari |
+| ONNX export | ✅ `obs_dict[1,1570] -> action[1,29]` |
 
 ---
 
