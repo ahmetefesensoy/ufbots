@@ -125,7 +125,12 @@ Motion Data by Bones Studio
 github.com/<kullanici>/ufbots
 ```
 
-⬜ Repo henüz push edilmedi — yapılacak
+Repo hazir, 4 commit. Push icin (GitHub'da bos repo acip):
+
+```bash
+git remote add origin https://github.com/<kullanici>/ufbots.git
+git push -u origin master
+```
 
 ---
 
@@ -135,7 +140,15 @@ github.com/<kullanici>/ufbots
 hf.co/<kullanici>/ufbots-chanleak-g1
 ```
 
-⬜ Yüklenecek dosya: `model_step_005000_g1.onnx` (58 MB)
+Hazir: `dist/onnx/` — 5 ONNX + model karti.
+Ana dosya `model_step_005000_g1.onnx` (58 MB) dogrulandi:
+`onnx.checker` gecti, CPU'da calisti, `obs_dict[1,1570] -> action[1,29]`.
+
+```bash
+hf auth login
+hf repo create ufbots-chanleak-g1 --type model
+hf upload <kullanici>/ufbots-chanleak-g1 dist/onnx .
+```
 
 ---
 
@@ -145,7 +158,12 @@ hf.co/<kullanici>/ufbots-chanleak-g1
 hf.co/datasets/<kullanici>/ufbots-bokator-g1
 ```
 
-⬜ Hazır paket: `dist/ufbots-bokator-g1/` (32 klip, CSV+NPZ+manifest)
+Hazir: `dist/ufbots-bokator-g1/` — 32 klip (CSV+NPZ), manifest, metrikler, kart.
+
+```bash
+hf repo create ufbots-bokator-g1 --type dataset
+hf upload <kullanici>/ufbots-bokator-g1 dist/ufbots-bokator-g1 . --repo-type dataset
+```
 
 ---
 
@@ -155,7 +173,52 @@ hf.co/datasets/<kullanici>/ufbots-bokator-g1
 youtube.com/watch?v=...
 ```
 
-⬜ Yapılacak: before/after kurgusu
-- **Before:** PD kontrol, robot düşüyor (`results/` altındaki kayıtlar)
-- **After:** eğitilmiş politika (`videolar.tgz` içindeki 8 video)
-- Açıklamaya **"Motion Data by Bones Studio"** yaz
+Hazir: `results/submission_video.mp4` — 23 s, 1920x1080.
+
+Kurgu: baslik -> "Kinematically correct is not balanced" -> 9 s bolunmus
+ekran (solda PD kontrol duser, sagda egitilmis politika ayakta) ->
+metrikler -> Bones Studio kredisi.
+
+**YouTube basligi:**
+```
+G1 Chanleak - Bokator Flying Knee on a Unitree G1 (SONIC fine-tune)
+```
+
+**Aciklama** (krediyi iceriyor):
+```
+Teaching a Unitree G1 humanoid the Chanleak - the flying knee strike
+from Bokator, the Khmer battlefield martial art.
+
+Left: PD control. Joint angles tracked to within 3 degrees - and it
+falls in 1.1 seconds. Right: policy fine-tuned from NVIDIA SONIC.
+
+  PD control      0% success
+  Trained policy  61% success
+  mpjpe_g         189 mm (target <200)
+
+6,933 iterations on a single NVIDIA L4.
+
+Pipeline: CMU Mocap -> AMASS SMPL-X -> GMR retarget -> G1 29-DOF -> SONIC.
+
+Motion Data by Bones Studio
+
+Code: github.com/<kullanici>/ufbots
+```
+
+Yuklerken **Unlisted degil Public** sec — form linki acacak.
+
+---
+
+## Yuklemeden once
+
+- [ ] GitHub repo push
+- [ ] HF model upload
+- [ ] HF dataset upload
+- [ ] YouTube upload (Public)
+- [ ] Linkleri bu dosyada `<kullanici>` yerine yaz
+- [ ] Formu doldur
+
+**HF token:** sohbete yapistirdigin eski token'i
+huggingface.co/settings/tokens adresinden **iptal et**, yeni bir
+`write` token uret. Upload icin `write` yetkisi gerekiyor (eskisi
+read-only idi, zaten yetmez).
