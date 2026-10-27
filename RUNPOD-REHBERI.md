@@ -67,59 +67,49 @@ Web terminal ya da SSH:
 ```bash
 cd /workspace
 nvidia-smi                      # RTX gorunuyor mu, dogrula
-df -h /workspace                # 40 GB var mi
+df -h /workspace                # 60 GB var mi
 ```
 
 `nvidia-smi` cikisinda **RTX** yazmiyorsa pod'u sil, dogru GPU ile ac.
 
 ---
 
-## 3. Isaac Lab — HAZIR IMAJ KULLAN
+## 3. Isaac Sim + Isaac Lab kur
 
-⚠️ **pip ile kurma!** 45 dakika surer ve para yakar.
-NVIDIA'nin hazir imaji var ve **SONIC'in istedigi tam surum**:
+⚠️ **En uzun adim (~30-45 dk).** Sabirli ol, cikti akiyorsa calisiyor.
 
-```
-nvcr.io/nvidia/isaac-lab:2.3.2
-```
-
-### Pod olustururken
-
-**Template** yerine **Custom Image** sec ve yukaridaki adresi gir.
-
-Environment variables (zorunlu):
-```
-ACCEPT_EULA=Y
-PRIVACY_CONSENT=Y
-```
-
-Bu ikisi olmazsa konteyner acilmaz.
-
-### Baglaninca dogrula
+**Python 3.11 SART** (Isaac Sim 5.x icin):
 
 ```bash
+python --version            # 3.11.x olmali, degilse:
+conda create -n isaac python=3.11 -y && conda activate isaac
+```
+
+```bash
+cd /workspace
+pip install --upgrade pip
+
+# PyTorch — Isaac Sim'in bekledigi tam surum
+pip install -U torch==2.7.0 torchvision==0.22.0  --index-url https://download.pytorch.org/whl/cu128
+
+# Isaac Sim 5.1.0
+pip install "isaacsim[all,extscache]==5.1.0"  --extra-index-url https://pypi.nvidia.com
+
+# Isaac Lab
+git clone https://github.com/isaac-sim/IsaacLab.git
+cd IsaacLab
+./isaaclab.sh --install
+```
+
+Dogrulama:
+
+```bash
+python -c "import isaacsim; print('isaacsim OK')"
 python -c "import isaaclab; print('isaaclab OK')"
-ls /workspace/isaaclab        # bos OLMAMALI
 ```
-
-> ⚠️ Bilinen sorun: RunPod UDP trafigi acmiyor, bazi durumlarda
-> `/workspace/isaaclab/` bos kaliyor. Bos gorursen pod'u terminate
-> edip asagidaki alternatife gec.
-
-### Alternatif: pip kurulumu (imaj calismazsa)
-
-Sadece hazir imaj tutmazsa. **Python 3.11 sart.**
-
-```bash
-python --version            # 3.11.x olmali
-pip install -U torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cu128
-pip install "isaacsim[all,extscache]==5.1.0" --extra-index-url https://pypi.nvidia.com
-git clone https://github.com/isaac-sim/IsaacLab.git && cd IsaacLab && ./isaaclab.sh --install
-```
-
-Bu yol ~45 dk ve ~$0.25 ekstra maliyet demek.
 
 ---
+
 ## 4. GR00T-WBC kur
 
 ```bash
@@ -137,9 +127,7 @@ python download_from_hf.py --training     # sonic_release checkpoint
 
 ## 5. Veriyi yukle
 
-Yerelde hazirlanan paket: `dist/ufbots_payload.zip` (4.3 MB)
-
-Icerik: 32 dovus klibi + 28 taban klibi (yurume/durus/denge/donus)
+Yerelde hazirlanan paket: `dist/ufbots_payload.zip` (3 MB)
 
 **RunPod web arayuzu** → dosya yoneticisi → `/workspace` altina surukle.
 
@@ -150,7 +138,7 @@ cd /workspace
 # (dosyayi yukledikten sonra)
 unzip ufbots_payload.zip -d ufbots
 ls ufbots/csv | wc -l        # 32 olmali
-ls ufbots/base_csv | wc -l   # 28 taban klibi
+ls ufbots/base_csv | wc -l   # 17 taban klibi
 ```
 
 ---
@@ -177,7 +165,7 @@ python gear_sonic/data_process/filter_and_copy_bones_data.py \
     --source /workspace/motion_lib/robot \
     --dest /workspace/motion_lib/robot_filtered --workers 8
 
-ls /workspace/motion_lib/robot_filtered | wc -l    # ~60 olmali
+ls /workspace/motion_lib/robot_filtered | wc -l    # ~49 olmali
 ```
 
 ---
@@ -299,45 +287,25 @@ volume kalsin ki tekrar kurulum yapmayasin).
 | `git lfs pull` atlanmis | Sessiz bozuk veri — tekrar calistir |
 | CUDA OOM | `num_envs` dusur (1024 → 512 → 256) |
 | Egitim cok yavas | `throughput/fps` bak; <200 ise GPU yanlis |
-| Disk dolu | Container disk'i 50 GB'a cikar (pod yeniden olustur) |
+| Disk dolu | Volume'u 60 GB'a cikar |
 
 ---
 
 ## Maliyet takibi
 
-RunPod panelinde canli harcama gorunur.
-
-### Hazir imajla (onerilen) — Community Cloud RTX A5000 @ $0.26
+RunPod panelinde canli harcama gorunur. Beklenen:
 
 ```
-imaj indirme + acilis    0.3 saat   $0.08
-GR00T-WBC kurulum        0.5 saat   $0.13
-veri donusumu            0.2 saat   $0.05
-kisa deneme (200 iter)   0.3 saat   $0.08
-egitim (20000 iter)      3.0 saat   $0.78
-eval + render + ONNX     0.5 saat   $0.13
---------------------------------------------
-toplam                   4.8 saat   ~$1.25
+kurulum      1.5 saat   $0.51
+donusum      0.2 saat   $0.07
+deneme       0.3 saat   $0.10
+egitim       3.0 saat   $1.02
+eval+export  0.5 saat   $0.17
+--------------------------------
+toplam       5.5 saat   ~$1.87
 ```
 
-### Pip kurulumuyla (imaj tutmazsa)
-
-```
-+ Isaac Sim pip kurulum  0.8 saat   +$0.21
---------------------------------------------
-toplam                   5.6 saat   ~$1.46
-```
-
-### Guvenlik payi
-
-| Durum | Maliyet | Butce |
-|---|---|---|
-| Her sey yolunda | ~$1.25 | ✅ $3.75 kalir |
-| Bir seyler takilir (2x sure) | ~$2.50 | ✅ $2.50 kalir |
-| Felaket (3x sure) | ~$3.75 | ⚠️ $1.25 kalir |
-
-**$3.50 esigini gecerse dur.** Elindeki checkpoint'le devam et —
-20000 degil 5000 iterasyonda bile kullanilabilir sonuc cikar.
+$5 butcede rahat pay var.
 
 ---
 
